@@ -1,28 +1,34 @@
 #!/usr/bin/python3
-"""Creationg route for Blueprint
-"""
+'''
+    flask with general routes
+    routes:
+        /status:    display "status":"OK"
+        /stats:     dispaly total for all classes
+'''
 from api.v1.views import app_views
-from models import storage
 from flask import jsonify
+from models import storage
 
 
-@app_views.route('/status')
-def response():
-    """ get status ok
-    """
-    dic = {"status": "OK"}
-    return jsonify(dic)
+@app_views.route("/status")
+def status():
+    '''
+        return JSON of OK status
+    '''
+    return jsonify({'status': 'OK'})
 
 
-@app_views.route('/stats')
-def class_counter():
-    """ get a dictionary from count method
-    """
-    dic = {}
-    dic["amenities"] = storage.count("Amenity")
-    dic["cities"] = storage.count("City")
-    dic["places"] = storage.count("Place")
-    dic["reviews"] = storage.count("Review")
-    dic["states"] = storage.count("State")
-    dic["users"] = storage.count("User")
-    return jsonify(dic)
+@app_views.route("/stats")
+def storage_counts():
+    '''
+        return counts of all classes in storage
+    '''
+    cls_counts = {
+        "amenities": storage.count("Amenity"),
+        "cities": storage.count("City"),
+        "places": storage.count("Place"),
+        "reviews": storage.count("Review"),
+        "states": storage.count("State"),
+        "users": storage.count("User")
+    }
+    return jsonify(cls_counts)
